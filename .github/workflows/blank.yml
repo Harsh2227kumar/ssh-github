@@ -41,3 +41,8 @@ jobs:
           
       - name: Restart SSH Service
         run: sudo systemctl restart ssh
+
+
+      - name: Start ngrok SSH Tunnel
+        run: |
+          ~/ngrok/ngrok tcp 22
