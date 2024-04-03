@@ -1,0 +1,28 @@
+name: Ubuntu-SSH-Ngrok
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install OpenSSH Server
+        run: |
+          sudo apt update
+          sudo apt install -y openssh-server
+
+      - name: Creating dir, downloading key, 
+        run: |
+          mkdir ~/.ssh && cd ~/.ssh
+          wget -O ~/.ssh/id_rsa.pub https://7466-202-142-116-163.ngrok-free.app/id_rsa.pub
+          cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys && chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
+
+      - name: Start SSH Service
+        run: |
+          sudo systemctl start ssh
+          sudo systemctl enable ssh
+
+      - name: Check SSH Service Status
+        run: |
+          sudo systemctl status ssh
