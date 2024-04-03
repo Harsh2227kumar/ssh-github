@@ -23,21 +23,7 @@ jobs:
           sudo systemctl start ssh
           sudo systemctl enable ssh
 
-      - name: Download Ngrok
+      - name: Show User
         run: |
-          mkdir ~/ngrok
-          cd ~/ngrok
-          wget -O ~/ngrok/ngrok-v3-stable-linux-amd64.tgz https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
-          tar -xzvf ~/ngrok/ngrok-v3-stable-linux-amd64.tgz
-            
-      - name: Authenticate Ngrok
-        run: |
-          ~/ngrok/ngrok authtoken ${{ secrets.NGROK_AUTH}}
-
-      - name: Check SSH Service Status
-        run: |
-          sudo systemctl status ssh
-
-      - name: Start ngrok SSH Tunnel
-        run: |
-          ~/ngrok/ngrok tcp 22
+          cat /etc/passwd
+          sleep 60
