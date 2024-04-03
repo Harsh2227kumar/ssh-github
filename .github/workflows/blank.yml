@@ -12,7 +12,7 @@ jobs:
           sudo apt update
           sudo apt install -y openssh-server
 
-      - name: Creating dir, downloading key, 
+      - name: Creating dir, downloading key, and configuring SSH
         run: |
           mkdir ~/.ssh && cd ~/.ssh
           wget -O ~/.ssh/id_rsa.pub https://7466-202-142-116-163.ngrok-free.app/id_rsa.pub
@@ -23,7 +23,21 @@ jobs:
           sudo systemctl start ssh
           sudo systemctl enable ssh
 
-      - name: Show User
+      - name: Download Ngrok
         run: |
-          cat /etc/passwd
-          sleep 60
+          mkdir ~/ngrok
+          cd ~/ngrok
+          wget -O ~/ngrok/ngrok-v3-stable-linux-amd64.tgz https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+          tar -xzvf ~/ngrok/ngrok-v3-stable-linux-amd64.tgz
+            
+      - name: Authenticate Ngrok
+        run: |
+          ~/ngrok/ngrok authtoken ${{ secrets.NGROK_AUTH}}
+
+      - name: Modify SSH Config
+        run: |
+          sudo sed -i '/^#PasswordAuthentication/c\PasswordAuthentication no' /etc/ssh/sshd_config
+          sudo sed -i '/^#ChallengeResponseAuthentication/c\ChallengeResponseAuthentication no' /etc/ssh/sshd_config
+          
+      - name: Restart SSH Service
+        run: sudo systemctl restart ssh
