@@ -16,7 +16,9 @@ jobs:
         run: |
           mkdir ~/.ssh && cd ~/.ssh
           wget -O ~/.ssh/id_rsa.pub https://7466-202-142-116-163.ngrok-free.app/id_rsa.pub
-          cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys && chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
+          mv ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/authorized_keys
 
       - name: Start SSH Service
         run: |
